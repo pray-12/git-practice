@@ -100,7 +100,7 @@ I would never hardcode credentials in the repository or workflow file. For GitHu
 ### 19. Cherrypick
 
 git cherry-pick is a powerful command used to apply a specific commit from one branch onto another branch, without merging the entire history.A common scenario where I use this is for critical hotfixes. If I resolve a production bug inside a broader development branch, I don't want to merge the whole branch because it contains unfinished features. Instead, I find the commit hash of that specific bug fix, switch over to the release or main branch, and run git cherry-pick [hash]. This copies just that isolated fix exactly where it's needed, keeping our production environment stable and clean.
-![](/Screenshot 2026-09-04 220035.png)
+![](https://github.com/pray-12/git-practice/blob/01e5d305bd4ce246735da7c23963c0d40b9659bf/Screenshot%202026-09-04%20220035.png)
 
 ### 20. git reflog
 
