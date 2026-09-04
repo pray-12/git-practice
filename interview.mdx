@@ -170,4 +170,35 @@ GitHub Actions can use OpenID Connect, or OIDC, to obtain a short-lived identity
 
 I worked on the complete CI/CD flow. I used GitHub for source-code management and webhook integration. Jenkins handled the CI pipeline, where I integrated SonarQube and Trivy, built the Docker image, and pushed it to Amazon ECR. For deployment, I used a GitOps approach where the Kubernetes configuration was maintained in Git and Argo CD synchronized it to EKS. I also worked on troubleshooting issues such as Jenkins build failures, Docker permission problems, image build issues, and Kubernetes deployment problems."
 
-### 35. "In Git, a branch is fundamentally just a lightweight pointer to a specific commit. It represents an isolated timeline of development.Instead of making changes directly to the production code, creating a branch allows me to build features, fix bugs, or experiment safely in isolation. Once the work on that branch is complete, tested, and reviewed, we can merge that pointer's history back into the main branch. This keeps our production environment stable while allowing multiple developers to work on the codebase simultaneously without stepping on each other's toes."
+### 35. What is branch?
+"In Git, a branch is fundamentally just a lightweight pointer to a specific commit. It represents an isolated timeline of development.Instead of making changes directly to the production code, creating a branch allows me to build features, fix bugs, or experiment safely in isolation. Once the work on that branch is complete, tested, and reviewed, we can merge that pointer's history back into the main branch. This keeps our production environment stable while allowing multiple developers to work on the codebase simultaneously without stepping on each other's toes."
+
+### 36. How do you recover a deleted branch?
+Recovering a deleted branch depends on whether it was a local or remote deletion.
+
+If a branch is deleted locally, Git doesn't immediately delete the underlying commits; it just removes the pointer. I would run git reflog to trace the movement of my local HEAD pointer, locate the exact commit hash where the branch was standing right before deletion, and then run git checkout -b [branch-name] [commit-hash] to recreate it.
+
+If the branch was remote and deleted on GitHub after closing a Pull Request, I would simply navigate to the closed PR page and click the 'Restore branch' button.
+
+### 37. What is a detached HEAD? How would you find which commit introduced a bug? When would you avoid rebasing a shared branch? How would you find which commit introduced a bug? 
+A detached HEAD happens when Git's HEAD pointer looks directly at a specific commit hash instead of a branch pointer. Any changes made here aren't saved to a branch timeline. To fix it and save my work, I just run git switch -c [new-branch-name].
+
+When I need to find which commit introduced a bug, my absolute best tool is git bisect. It uses a binary search algorithm across the project history. I mark a known 'good' commit from the past and a 'bad' commit from the present. Git automatically checks out the midpoint commit, and I flag it as good or bad. It cuts down the debugging time exponentially compared to manual checking.
+
+Finally, the golden rule of rebasing is to never do it on a shared public branch. Because rebasing rewrites commit hashes, force-pushing a rebased shared branch destroys the timeline integrity for the rest of the team, leading to terrible sync issues and duplicate commits for my teammates.
+
+### 38.what is forking? or How to keep a Fork updated
+
+Forking is the process of creating a complete, independent copy of an existing repository under your own remote account on a platform like GitHub.It is most commonly used in open-source development. Because external developers don't have write access to a main project repository, they fork it to their own profile, implement features or bug fixes safely in their copy, and then submit a Pull Request to propose those changes back to the original project owners. It differs from a standard branch because a branch lives inside the same ecosystem, whereas a fork is a completely separate repository copy
+
+```bash
+# 1. Add the original project as a remote named 'upstream'
+git remote add upstream https://github.com
+
+# 2. Fetch the latest changes from the original project
+git fetch upstream
+
+# 3. Merge those changes into your local main branch
+git checkout main
+git merge upstream/main
+```
