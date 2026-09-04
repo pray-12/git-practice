@@ -100,5 +100,73 @@ I would never hardcode credentials in the repository or workflow file. For GitHu
 ### 19. Cherrypick
 
 git cherry-pick is a powerful command used to apply a specific commit from one branch onto another branch, without merging the entire history.A common scenario where I use this is for critical hotfixes. If I resolve a production bug inside a broader development branch, I don't want to merge the whole branch because it contains unfinished features. Instead, I find the commit hash of that specific bug fix, switch over to the release or main branch, and run git cherry-pick [hash]. This copies just that isolated fix exactly where it's needed, keeping our production environment stable and clean.
+![](/Screenshot 2026-09-04 220035.png)
 
-### 
+### 20. git reflog
+
+`git reflog` is my absolute safety net. Unlike git log which only tracks the current branch's commit history, reflog tracks every single action my local HEAD pointer takes. If a developer accidentally runs a destructive command like `git reset --hard` or mismanages a complex rebase, `git reflog` allows us to look at the history of our actions, locate the lost commit hash, and cleanly restore the codebase back to its exact state before the mistake.
+
+### 21. git switch vs checkout 
+
+" `git switch` was introduced to separate concerns from the older git checkout command. `git checkout` is a dual-purpose tool used for both navigating between branches and modifying individual files, which can sometimes lead to accidental file overrides. `git switch` is a modern, safer command dedicated strictly to switching or creating branches, making the intent of the command much more explicit."
+
+### 22. delete a branch
+
+To delete a branch locally, I use `git branch -d`, which is safe because Git will warn me and block the deletion if the changes haven't been fully merged yet. If I'm intentionally discarding an experimental branch, I force it using a capital -D. To clean up the shared remote repository after a Pull Request is closed, I delete the remote copy by running `git push origin --delete`.
+
+### 23. describe commit
+To review project history, my go-to command is git log. For a quick and comprehensive view of how branches have split and merged, I use git log --oneline --graph --decorate. This gives me a highly readable, linear layout of the entire repository history. If I need to audit a specific bug or review what changed in a file over time, I filter the logs using commands like git log -p or target the specific file directly using git log -- [filename].
+
+### 24. What is GitHub Actions?
+
+GitHub Actions is GitHub's CI/CD automation platform. We define workflows using YAML files under .github/workflows. Workflows can be triggered by events such as push, pull request, or manual execution. Inside a workflow, we define jobs and steps that can perform tasks such as testing, code scanning, building Docker images, pushing them to ECR, and deploying applications.
+
+### 25. What's a runner in GitHub Actions?
+
+A runner is the machine that actually executes the jobs in a GitHub Actions workflow. We can use GitHub-hosted runners, or we can configure our own self-hosted runner when we need more control over the environment.
+
+### 26. Your GitHub Actions pipeline is failing. What do you do? or The pipeline was working yesterday, but today it's failing. How do you troubleshoot?
+
+I would first open the workflow logs and identify the exact stage and command that failed. Then I'd check whether there were recent code, dependency, workflow, or infrastructure changes. If the failure involves authentication, I'd check the secrets or OIDC/IAM configuration. If it's a Docker build failure, I'd check the Dockerfile and build context. I would reproduce the issue locally where possible and then fix the root cause rather than just rerunning the pipeline.
+
+### 27. GitHub → Jenkins. How does it work?
+
+We configure a GitHub webhook pointing to Jenkins. When an event such as a push occurs, GitHub sends an HTTP request to Jenkins. Jenkins receives the webhook and triggers the configured pipeline. The pipeline then checks out the code and starts the required CI stages.
+
+### 28. Jenkins isn't triggered after a GitHub push. Troubleshoot it.
+
+First, I'd check the GitHub webhook delivery status to see whether GitHub successfully sent the request. Then I'd check Jenkins logs and webhook configuration. I'd verify that the repository URL and branch configuration are correct and that Jenkins is reachable from GitHub. I'd also check whether the Jenkins job is configured to trigger from the expected GitHub event.
+
+### 29. How would you implement CI/CD using GitHub?
+
+1. For example, when a developer pushes code, GitHub triggers Jenkins through a webhook. 
+2. Jenkins checks out the code and performs code-quality analysis using SonarQube, security scanning using Trivy, and builds the Docker image. 
+3. The image is then pushed to Amazon ECR. 
+4. For deployment, instead of Jenkins directly modifying Kubernetes, we can update the GitOps repository and let Argo CD synchronize the changes to EKS.
+
+### 30. Why use GitHub for GitOps?
+or
+### Why would you have another Git repository for Kubernetes manifests?
+
+We separate application source code from deployment configuration. The application repository contains the source code and CI configuration, while the GitOps repository contains Kubernetes manifests or Helm configuration. Argo CD watches the GitOps repository and continuously reconciles the desired state with the Kubernetes cluster.
+
+### 31. What if someone directly changes Kubernetes?
+or
+### Suppose someone manually changes a deployment using kubectl. What happens?
+
+In a GitOps model, that change creates drift because the live cluster state differs from the desired state in Git. Argo CD can detect that drift and, depending on the sync configuration, reconcile the cluster back to the state defined in Git.
+
+### 32. How would you rollback?"
+
+If we're using GitOps, I would revert the deployment change in the GitOps repository to the previous known-good version. Argo CD would detect the Git change and synchronize the previous version back to the cluster. I would also investigate why the deployment failed before redeploying the newer version.
+
+### 33. What is GitHub OIDC?
+
+You said you use AWS. How can GitHub Actions access AWS without storing access keys?
+
+GitHub Actions can use OpenID Connect, or OIDC, to obtain a short-lived identity token. AWS trusts GitHub's OIDC provider, and based on an IAM role's trust policy, GitHub Actions can assume that role. This avoids storing long-lived AWS access keys in GitHub.
+
+### 34 You've told me GitHub, Jenkins, Docker, ECR, Kubernetes and Argo CD. But tell me—what exactly did YOU do?
+
+I worked on the complete CI/CD flow. I used GitHub for source-code management and webhook integration. Jenkins handled the CI pipeline, where I integrated SonarQube and Trivy, built the Docker image, and pushed it to Amazon ECR. For deployment, I used a GitOps approach where the Kubernetes configuration was maintained in Git and Argo CD synchronized it to EKS. I also worked on troubleshooting issues such as Jenkins build failures, Docker permission problems, image build issues, and Kubernetes deployment problems."
+
