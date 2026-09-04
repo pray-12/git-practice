@@ -1,0 +1,104 @@
+## 1. Can you tell me how you use GitHub in your projects?
+I primarily use GitHub for source-code management and collaboration. Developers push their code to feature branches, and we create pull requests for code review. Once the PR is approved and merged into the main branch, it triggers our CI pipeline through a webhook. In my DevOps projects, GitHub is basically the starting point of the CI/CD process
+
+### 2. What's the difference between Git and GitHub?
+Git is a distributed version control system that runs locally and tracks changes in source code. GitHub is a cloud-based platform that hosts Git repositories and provides collaboration features like pull requests, code reviews, branch protection, issues, and CI/CD integration.
+
+### 3. Can I use Git without GitHub?
+Yes. Git doesn't depend on GitHub. I can use Git locally and connect it to other remote repositories such as GitLab, Bitbucket, or even a self-hosted Git server.
+
+### 4. Walk me through your Git workflow.
+First, I would pull the latest code from the main branch. Then I would create a feature branch and work on the changes. After testing locally, I would commit and push the branch to GitHub. Then I would create a pull request. The PR goes through code review and automated checks. Once it's approved and all checks pass, it's merged into the main branch, which then triggers the CI/CD pipeline.
+
+### 5. Why do you create branches?
+I create branches primarily for risk isolation and seamless collaboration.
+
+If we make changes directly on main, we risk pushing broken code straight to production, which directly impacts users and disrupts the team.By using feature branches, I can develop, test, and run automated CI/CD pipelines in a safe environment.
+It also allows for code reviews through Pull Requests, ensuring that at least one other set of eyes verifies the code before it ever touches our stable production environment."
+
+#### 6. What is a Pull Request?
+A pull request is a request to merge changes from one branch into another, usually a feature branch into main. Other developers can review the changes, add comments, and approve or request changes. Automated CI checks can also run against the PR. We merge it only when the required reviews and checks are successful
+
+### 7. What are branch protection rules? or How would you protect your main branch?
+I would enable branch protection rules. For example, I can prevent direct pushes, require pull requests, require one or more approvals, and require CI status checks to pass before merging. This helps prevent untested or unauthorized code from reaching the main branch.
+
+### 8. What is a merge conflict?
+A merge conflict happens when Git cannot automatically merge code because two people changed the same line of code in the same file, or one person edited a file while another deleted it. Git gets confused about which version to keep and pauses the merge, requiring human intervention.
+
+### 9. What is a merge conflict? steps to resolve it?
+A merge conflict happens when Git cannot automatically merge code because two people changed the same line of code in the same file, or one person edited a file while another deleted it. Git gets confused about which version to keep and pauses the merge, requiring human intervention.
+
+To resolve it, I run git status to locate the affected files, open them in my editor, and look for the conflict markers. I then collaborate with the teammate who wrote the competing code if needed, clean up the file to keep the correct logic, and delete the Git markers. Finally, I stage the resolved file with git add and commit the merge to finish the process."
+then push it.
+
+#### Rebase Conflicts
+When resolving conflicts during a git rebase, the process is slightly different because Git applies your changes commit-by-commit.After fixing the conflict markers in the code, I stage the changes using git add. However, instead of making a new commit, I run git rebase --continue. Git will then apply the next commit. Once the entire rebase is successful, I use git push --force-with-lease to safely update the remote tracking branch, since rebasing rewrites the commit history.
+
+### 10. merge vs rebase
+
+"I choose between merge and rebase based on **history management and team workflow**.
+
+I use **git merge** when I want to preserve the exact historical timeline of the project, as it creates a dedicated merge commit showing exactly where branches joined. It's also the safest option for public or shared branches.
+
+I use **git rebase** on my local, private feature branches to pull in updates from main. It rewrites the base of my branch so my changes sit cleanly on top of the latest production code, creating a perfectly linear history that makes debugging and reading logs much easier."
+
+|Feature|git merge|git rebase|
+|-------|---------|----------|
+|History |StructureNon-linear (shows branches and joins)|Linear (one straight line of commits)|
+|Commit History | Preserves original timestamps and logs | Rewrites history (creates new commit hashes) |
+
+### 11 . Would you rebase a shared branch?
+Generally, no. Rebase rewrites commit history, so doing it on a branch that other developers are already using can cause problems. I would typically rebase my own feature branch before merging.
+
+### 12. git pull vs git fetch?
+When I run **git fetch**, Git downloads the latest changes from the remote repository into my tracking branches, but it doesn't touch my working files. This allows me to use git log or git diff to review what my team has changed before I bring it into my code.
+
+**git pull**, on the other hand, is a combination of git fetch and git merge. It downloads the changes and immediately attempts to combine them with my local branch. I often prefer using git pull --rebase in my daily workflow to keep our project history clean and linear.
+
+### 13. What happens when you do git push?
+
+When I run git push, Git uploads my local commits, file changes, and branch history to the remote repository, like GitHub.
+
+Before the transfer happens, Git ensures that my local branch is fully synced with the remote branch. If the remote branch has new commits from other developers that I don't have yet, Git will safely reject my push. This forces me to pull and resolve any conflicts locally first. Once verified, it transfers the data and updates the remote tracking pointers, which often kicks off our automated CI/CD testing pipelines.
+
+### 14. A developer says git push is rejected. What do you check?
+First I'd look at the exact error message. If it's a non-fast-forward error, I'd check whether someone pushed new changes to the remote branch. I would fetch the latest changes and then merge or rebase them before pushing again. 
+
+If it's a permission error, I'd check repository permissions and authentication. If it's the main branch, I'd also check whether branch protection is preventing the push.
+
+### 15. Revert vs reset
+I would generally use **git revert** because it creates a new commit that reverses the changes from the bad commit. This is safer for a shared branch because it doesn't rewrite the existing history.
+
+**Reset** changes the branch history, which can cause problems if the commits have already been pushed and other developers are working on them. So for a shared branch like main, revert is usually safer.
+
+The Three Flavours of git **reset**
+
+- `--soft:` Moves the history back, but keeps your changes staged (in the green zone). Ready to be recommitted.
+- `--mixed (Default)`: Moves the history back, keeps your changes, but unstages them (in the red zone).
+- `--hard:` Moves the history back and completely deletes all changes. Your working directory is wiped clean to that exact moment in time.
+
+### 16. What is git stash?
+
+or
+
+### You're working on something but suddenly need to switch branches. Your changes aren't ready to commit. What do you do?"
+
+I can use git stash to temporarily save my uncommitted changes. Then I can switch branches and come back later and use `git stash pop` to restore them.
+
+### 17. Someone committed a password to GitHub. What do you do?
+
+First, I wouldn't assume that deleting the commit solves the problem. 
+I would immediately revoke or rotate the exposed AWS credentials. 
+Then I'd check CloudTrail for any suspicious activity.
+After that, I'd remove the secret from the repository history if necessary and make sure the secret is stored securely, such as in GitHub Secrets or AWS Secrets Manager.
+Finally, I'd add the sensitive file to `.gitignore` and enable appropriate secret scanning and prevention controls.
+
+### 18. How do you store secrets in GitHub?
+
+I would never hardcode credentials in the repository or workflow file. For GitHub Actions, I can use GitHub encrypted secrets. For AWS authentication, I would prefer OIDC with an IAM role because it avoids storing long-lived AWS access keys.
+
+### 19. Cherrypick
+
+git cherry-pick is a powerful command used to apply a specific commit from one branch onto another branch, without merging the entire history.A common scenario where I use this is for critical hotfixes. If I resolve a production bug inside a broader development branch, I don't want to merge the whole branch because it contains unfinished features. Instead, I find the commit hash of that specific bug fix, switch over to the release or main branch, and run git cherry-pick [hash]. This copies just that isolated fix exactly where it's needed, keeping our production environment stable and clean.
+
+### 
