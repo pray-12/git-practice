@@ -161,8 +161,8 @@ In a GitOps model, that change creates drift because the live cluster state diff
 If we're using GitOps, I would revert the deployment change in the GitOps repository to the previous known-good version. Argo CD would detect the Git change and synchronize the previous version back to the cluster. I would also investigate why the deployment failed before redeploying the newer version.
 
 ### 33. What is GitHub OIDC?
-
-### 34. You said you use AWS. How can GitHub Actions access AWS without storing access keys?
+or
+### 33. You said you use AWS. How can GitHub Actions access AWS without storing access keys?
 
 GitHub Actions can use OpenID Connect, or OIDC, to obtain a short-lived identity token. AWS trusts GitHub's OIDC provider, and based on an IAM role's trust policy, GitHub Actions can assume that role. This avoids storing long-lived AWS access keys in GitHub.
 
@@ -170,3 +170,4 @@ GitHub Actions can use OpenID Connect, or OIDC, to obtain a short-lived identity
 
 I worked on the complete CI/CD flow. I used GitHub for source-code management and webhook integration. Jenkins handled the CI pipeline, where I integrated SonarQube and Trivy, built the Docker image, and pushed it to Amazon ECR. For deployment, I used a GitOps approach where the Kubernetes configuration was maintained in Git and Argo CD synchronized it to EKS. I also worked on troubleshooting issues such as Jenkins build failures, Docker permission problems, image build issues, and Kubernetes deployment problems."
 
+### 35. "In Git, a branch is fundamentally just a lightweight pointer to a specific commit. It represents an isolated timeline of development.Instead of making changes directly to the production code, creating a branch allows me to build features, fix bugs, or experiment safely in isolation. Once the work on that branch is complete, tested, and reviewed, we can merge that pointer's history back into the main branch. This keeps our production environment stable while allowing multiple developers to work on the codebase simultaneously without stepping on each other's toes."
