@@ -162,7 +162,7 @@ If we're using GitOps, I would revert the deployment change in the GitOps reposi
 
 ### 33. What is GitHub OIDC?
 
-You said you use AWS. How can GitHub Actions access AWS without storing access keys?
+### 34. You said you use AWS. How can GitHub Actions access AWS without storing access keys?
 
 GitHub Actions can use OpenID Connect, or OIDC, to obtain a short-lived identity token. AWS trusts GitHub's OIDC provider, and based on an IAM role's trust policy, GitHub Actions can assume that role. This avoids storing long-lived AWS access keys in GitHub.
 
