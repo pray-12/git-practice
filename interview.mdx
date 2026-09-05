@@ -31,6 +31,7 @@ To resolve it, I run git status to locate the affected files, open them in my ed
 then push it.
 
 #### Rebase Conflicts
+
 When resolving conflicts during a git rebase, the process is slightly different because Git applies your changes commit-by-commit.After fixing the conflict markers in the code, I stage the changes using git add. However, instead of making a new commit, I run git rebase --continue. Git will then apply the next commit. Once the entire rebase is successful, I use git push --force-with-lease to safely update the remote tracking branch, since rebasing rewrites the commit history.
 
 ### 10. merge vs rebase
