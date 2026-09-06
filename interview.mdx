@@ -121,7 +121,7 @@ git cherry-pick is a powerful command used to apply a specific commit from one b
 To delete a branch locally, I use `git branch -d`, which is safe because Git will warn me and block the deletion if the changes haven't been fully merged yet. If I'm intentionally discarding an experimental branch, I force it using a capital -D. To clean up the shared remote repository after a Pull Request is closed, I delete the remote copy by running `git push origin --delete`.
 
 ### 23. describe commit
-To review project history, my go-to command is git log. For a quick and comprehensive view of how branches have split and merged, I use git log --oneline --graph --decorate. This gives me a highly readable, linear layout of the entire repository history. If I need to audit a specific bug or review what changed in a file over time, I filter the logs using commands like git log -p or target the specific file directly using git log -- [filename].
+To review project history, my go-to command is `git log`. For a quick and comprehensive view of how branches have split and merged, I use `git log --oneline --graph --decorate`. This gives me a highly readable, linear layout of the entire repository history. If I need to audit a specific bug or review what changed in a file over time, I filter the logs using commands like `git log -p` or target the specific file directly using `git log -- [filename]`.
 
 ### 24. What is GitHub Actions?
 
