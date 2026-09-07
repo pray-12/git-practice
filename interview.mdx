@@ -174,7 +174,8 @@ GitHub Actions can use OpenID Connect, or OIDC, to obtain a short-lived identity
 
 ### 34 You've told me GitHub, Jenkins, Docker, ECR, Kubernetes and Argo CD. But tell me—what exactly did YOU do?
 
-I worked on the complete CI/CD flow. I used GitHub for source-code management and webhook integration. Jenkins handled the CI pipeline, where I integrated SonarQube and Trivy, built the Docker image, and pushed it to Amazon ECR. For deployment, I used a GitOps approach where the Kubernetes configuration was maintained in Git and Argo CD synchronized it to EKS. I also worked on troubleshooting issues such as Jenkins build failures, Docker permission problems, image build issues, and Kubernetes deployment problems."
+I worked on the complete CI/CD flow. I used GitHub for source-code management and webhook integration. Jenkins handled the CI pipeline, where I integrated SonarQube and Trivy, built the Docker image, and pushed it to Amazon ECR.
+I used Argo CD following a GitOps approach. The Kubernetes deployment manifests were maintained in a Git repository. Once the desired image version was updated in the GitOps repository, Argo CD detected the change and synchronized the application to the Amazon EKS cluster.
 
 ### 35. What is branch?
 "In Git, a branch is fundamentally just a lightweight pointer to a specific commit. It represents an isolated timeline of development.Instead of making changes directly to the production code, creating a branch allows me to build features, fix bugs, or experiment safely in isolation. Once the work on that branch is complete, tested, and reviewed, we can merge that pointer's history back into the main branch. This keeps our production environment stable while allowing multiple developers to work on the codebase simultaneously without stepping on each other's toes."
