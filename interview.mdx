@@ -182,7 +182,7 @@ I worked on the complete CI/CD flow. I used GitHub for source-code management an
 ### 36. How do you recover a deleted branch?
 Recovering a deleted branch depends on whether it was a local or remote deletion.
 
-If a branch is deleted locally, Git doesn't immediately delete the underlying commits; it just removes the pointer. I would run git reflog to trace the movement of my local HEAD pointer, locate the exact commit hash where the branch was standing right before deletion, and then run git checkout -b [branch-name] [commit-hash] to recreate it.
+If a branch is deleted locally, Git doesn't immediately delete the underlying commits; it just removes the pointer. I would run `git reflog` to trace the movement of my local HEAD pointer, locate the exact commit hash where the branch was standing right before deletion, and then run `git checkout -b [branch-name] [commit-hash]` to recreate it.
 
 If the branch was remote and deleted on GitHub after closing a Pull Request, I would simply navigate to the closed PR page and click the 'Restore branch' button.
 
