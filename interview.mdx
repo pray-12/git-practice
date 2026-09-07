@@ -189,6 +189,12 @@ If the branch was remote and deleted on GitHub after closing a Pull Request, I w
 ### 37. What is a detached HEAD? How would you find which commit introduced a bug? When would you avoid rebasing a shared branch? How would you find which commit introduced a bug? 
 A detached HEAD happens when Git's HEAD pointer looks directly at a specific commit hash instead of a branch pointer. Any changes made here aren't saved to a branch timeline. To fix it and save my work, I just run git switch -c [new-branch-name].
 
+| Feature | Normal (Attached) HEAD | Detached HEAD |
+| :--- | :--- | :--- |
+| **Pointer Target** | **HEAD** points to a branch (e.g., `main`), and that branch points to a commit. | **HEAD** points directly to a commit, completely bypassing the branch system. |
+| **New Commits** | When you make a new commit, the branch automatically moves forward with it. | When you make a new commit, it "floats" in space and does not belong to any branch. |
+
+
 When I need to find which commit introduced a bug, my absolute best tool is git bisect. It uses a binary search algorithm across the project history. I mark a known 'good' commit from the past and a 'bad' commit from the present. Git automatically checks out the midpoint commit, and I flag it as good or bad. It cuts down the debugging time exponentially compared to manual checking.
 
 Finally, the golden rule of rebasing is to never do it on a shared public branch. Because rebasing rewrites commit hashes, force-pushing a rebased shared branch destroys the timeline integrity for the rest of the team, leading to terrible sync issues and duplicate commits for my teammates.
