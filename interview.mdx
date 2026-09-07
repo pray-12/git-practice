@@ -187,7 +187,7 @@ If a branch is deleted locally, Git doesn't immediately delete the underlying co
 If the branch was remote and deleted on GitHub after closing a Pull Request, I would simply navigate to the closed PR page and click the 'Restore branch' button.
 
 ### 37. What is a detached HEAD? How would you find which commit introduced a bug? When would you avoid rebasing a shared branch? How would you find which commit introduced a bug? 
-A detached HEAD happens when Git's HEAD pointer looks directly at a specific commit hash instead of a branch pointer. Any changes made here aren't saved to a branch timeline. To fix it and save my work, I just run git switch -c [new-branch-name].
+A detached HEAD happens when Git's HEAD pointer looks directly at a specific commit hash instead of a branch pointer. Any changes made here aren't saved to a branch timeline. To fix it and save my work, I just run `git switch -c [new-branch-name]`.
 
 | Feature | Normal (Attached) HEAD | Detached HEAD |
 | :--- | :--- | :--- |
