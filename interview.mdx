@@ -44,9 +44,7 @@ A merge conflict happens when Git cannot automatically merge code because two pe
 
 "I choose between merge and rebase based on **history management and team workflow**.
 
-I use **git merge** when I want to preserve the exact historical timeline of the project, as it creates a dedicated merge commit showing exactly where branches joined. It's also the safest option for public or shared branches.
-
-I use **git rebase** on my local, private feature branches to pull in updates from main. It rewrites the base of my branch so my changes sit cleanly on top of the latest production code, creating a perfectly linear history that makes debugging and reading logs much easier."
+Git merge combines two branches while preserving their existing commit history and usually creates a merge commit. Git rebase moves or replays the commits from one branch onto another, creating new commit hashes and producing a linear history. I generally prefer merge for shared branches and rebase for cleaning up my own feature branch before merging.
 
 |Feature|git merge|git rebase|
 |-------|---------|----------|
